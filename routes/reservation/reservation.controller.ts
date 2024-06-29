@@ -14,7 +14,7 @@ export const createReservation = async (
   req: Request,
   res: Response,
   next: NextFunction
-) => {
+) : Promise<void> => {
   try {
     const { userId, tableNumber, reservationTime } = createReservationSchema.parse(req.body);
 
@@ -45,7 +45,7 @@ export const createReservation = async (
       10
     );
 
-    const isTableBooked = reservationsResult.pagedReservations.some(
+    const isTableBooked = reservationsResult?.pagedReservations.some(
       (reservation) => reservation.tableNumber === tableNumber
     );
 
@@ -73,7 +73,7 @@ export const createReservation = async (
 //@desc Get reservations by start date and end date
 //@route GET/reservations
 //@access public
-export const getReservations = async (req: Request, res: Response, next: NextFunction) => {
+export const getReservations = async (req: Request, res: Response, next: NextFunction) : Promise<void> => {
   try {
 
     const { start_date, end_date, current_page , items_per_page } = fetchReservationsSchema.parse(req.query);

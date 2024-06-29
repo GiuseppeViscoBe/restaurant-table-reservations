@@ -1,19 +1,12 @@
 import { db } from "../config/database";
+import { Reservation, PaginatedReservations } from "../interfaces/reservation.interface";
 
-interface Reservation {
-  id?: number;
-  userId: number;
-  tableNumber: number;
-  reservationTime: Date;
-}
-
-const createReservation = async (reservation: Reservation) => {
+const createReservation = async (reservation: Reservation) : Promise<Reservation | undefined>   => {
   const insertedReservationResult = await db
     .insertInto("reservations")
     .values(reservation)
     .executeTakeFirstOrThrow();
 
-  console.log(insertedReservationResult.insertId);
   const createdReservation = await getReservationById(
     insertedReservationResult.insertId
   );
@@ -21,12 +14,14 @@ const createReservation = async (reservation: Reservation) => {
   return createdReservation;
 };
 
-const getReservationById = async (id: any) => {
-  return await db
+const getReservationById = async (id: any) : Promise<Reservation | undefined>  => {
+  const resultReservation = await db
     .selectFrom("reservations")
     .selectAll()
     .where("id", "=", id)
     .executeTakeFirst();
+
+    return resultReservation
 };
 
 const findReservationsByDateRange = async (
@@ -34,7 +29,7 @@ const findReservationsByDateRange = async (
   endDate: string,
   currentPage: number,
   itemsPerPage: number
-) => {
+) : Promise<PaginatedReservations | undefined> => {
   const start = new Date(startDate).toISOString();
   const end = new Date(endDate).toISOString();
   const offset = (currentPage - 1) * itemsPerPage;

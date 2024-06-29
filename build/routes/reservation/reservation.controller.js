@@ -34,7 +34,7 @@ const createReservation = (req, res, next) => __awaiter(void 0, void 0, void 0, 
         const reservationTimeStartToString = new Date(reservationTime).toISOString();
         const reservationTimeEndToString = new Date(new Date(reservationTime).setHours(new Date(reservationTime).getHours() + 1)).toISOString();
         const reservationsResult = yield reservation_model_1.default.findReservationsByDateRange(reservationTimeStartToString, reservationTimeEndToString, 1, 10);
-        const isTableBooked = reservationsResult.pagedReservations.some((reservation) => reservation.tableNumber === tableNumber);
+        const isTableBooked = reservationsResult === null || reservationsResult === void 0 ? void 0 : reservationsResult.pagedReservations.some((reservation) => reservation.tableNumber === tableNumber);
         if (isTableBooked) {
             const error = new Error("Table is already booked for this time slot");
             res.status(404);

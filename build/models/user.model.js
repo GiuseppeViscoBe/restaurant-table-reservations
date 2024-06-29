@@ -19,18 +19,20 @@ const createUser = (user) => __awaiter(void 0, void 0, void 0, function* () {
     return createdUser;
 });
 const getUserByEmail = (email) => __awaiter(void 0, void 0, void 0, function* () {
-    return yield database_1.db
+    const userByEmailResult = yield database_1.db
         .selectFrom("users")
         .selectAll()
         .where("email", "=", email)
         .executeTakeFirst();
+    return userByEmailResult;
 });
 const getUserById = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    return yield database_1.db
+    const userResultById = yield database_1.db
         .selectFrom("users")
         .selectAll()
         .where("id", "=", id)
         .executeTakeFirst();
+    return userResultById;
 });
 exports.default = {
     createUser,

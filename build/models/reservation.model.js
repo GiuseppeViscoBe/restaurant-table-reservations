@@ -15,16 +15,16 @@ const createReservation = (reservation) => __awaiter(void 0, void 0, void 0, fun
         .insertInto("reservations")
         .values(reservation)
         .executeTakeFirstOrThrow();
-    console.log(insertedReservationResult.insertId);
     const createdReservation = yield getReservationById(insertedReservationResult.insertId);
     return createdReservation;
 });
 const getReservationById = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    return yield database_1.db
+    const resultReservation = yield database_1.db
         .selectFrom("reservations")
         .selectAll()
         .where("id", "=", id)
         .executeTakeFirst();
+    return resultReservation;
 });
 const findReservationsByDateRange = (startDate, endDate, currentPage, itemsPerPage) => __awaiter(void 0, void 0, void 0, function* () {
     const start = new Date(startDate).toISOString();

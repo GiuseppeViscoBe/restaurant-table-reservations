@@ -48,6 +48,9 @@ const user_validator_1 = require("./../../validators/user.validator");
 //       }
 //       res.status(200).json({ existingUser });   
 //   });
+//@desc Create User
+//@route POST/user
+//@access public
 const createUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { name, email } = user_validator_1.createUserSchema.parse(req.body);

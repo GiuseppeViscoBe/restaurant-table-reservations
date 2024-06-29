@@ -1,7 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import userModel from "./../../models/user.model";
 import {createUserSchema} from "./../../validators/user.validator"
-import asyncHandler from 'express-async-handler'
 
 // const getUserByEmail = async (
 //   req: Request,
@@ -44,7 +43,10 @@ import asyncHandler from 'express-async-handler'
 //   });
   
 
-const createUser = async (req: Request, res: Response, next: NextFunction) => {
+//@desc Create User
+//@route POST/user
+//@access public
+const createUser = async (req: Request, res: Response, next: NextFunction) : Promise<void> => {
   try {
     const { name, email } = createUserSchema.parse(req.body);
 

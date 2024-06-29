@@ -1,12 +1,8 @@
 import { db } from "../config/database";
+import {User} from "./../interfaces/user.interface"
 
-interface User {
-  id?: number;
-  name: string;
-  email: string;
-}
 
-const createUser = async (user: User) => {
+const createUser = async (user: User) : Promise<User | undefined> => {
   const insertedUserResult = await db
     .insertInto("users")
     .values(user)
@@ -17,20 +13,24 @@ const createUser = async (user: User) => {
   return createdUser;
 };
 
-const getUserByEmail = async (email: string) => {
-  return await db
+const getUserByEmail = async (email: string) : Promise<User | undefined> => {
+  const userByEmailResult =  await db
     .selectFrom("users")
     .selectAll()
     .where("email", "=", email)
     .executeTakeFirst();
+
+    return userByEmailResult
 };
 
-const getUserById = async (id: any) => {
-  return await db
+const getUserById = async (id: any) : Promise<User | undefined> => {
+  const userResultById =  await db
     .selectFrom("users")
     .selectAll()
     .where("id", "=", id)
     .executeTakeFirst();
+
+    return userResultById
 };
 
 export default {
