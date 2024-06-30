@@ -17,7 +17,7 @@ const getUserByEmail = async (email: string) : Promise<User | undefined> => {
   const userByEmailResult =  await db
     .selectFrom("users")
     .selectAll()
-    .where("email", "=", email)
+    .where("userEmail", "=", email)
     .executeTakeFirst();
 
     return userByEmailResult

@@ -22,7 +22,7 @@ const getUserByEmail = (email) => __awaiter(void 0, void 0, void 0, function* ()
     const userByEmailResult = yield database_1.db
         .selectFrom("users")
         .selectAll()
-        .where("email", "=", email)
+        .where("userEmail", "=", email)
         .executeTakeFirst();
     return userByEmailResult;
 });

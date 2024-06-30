@@ -28,6 +28,11 @@ const getReservationById = (id) => __awaiter(void 0, void 0, void 0, function* (
 });
 const findReservationsByDateRange = (startDate, endDate, currentPage, itemsPerPage) => __awaiter(void 0, void 0, void 0, function* () {
     const offset = (currentPage - 1) * itemsPerPage;
+    // const startOfDayStartDate = startOfDay(startDate); 
+    // const endOfDayStartDate = endOfDay(endDate);
+    // console.log()
+    // console.log(startOfDayStartDate)
+    // console.log(endOfDayStartDate)
     const pagedReservations = yield database_1.db
         .selectFrom("reservations")
         .selectAll()

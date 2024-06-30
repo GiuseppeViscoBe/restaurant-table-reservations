@@ -16,17 +16,25 @@ exports.createReservationSchema = zod_1.z.object({
         .datetime({ message: "Reservation time must be a valid datetime string" })
         .refine((time) => {
         const date = new Date(time);
-        console.log(date);
-        return (!isNaN(date.getTime()) &&
-            date.getHours() >= 19 &&
-            date.getHours() < 24);
+        const hours = date.getUTCHours();
+        const minutes = date.getUTCMinutes();
+        const isValidTime = !isNaN(date.getTime()) && (hours >= 19 && (hours < 23 || (hours === 23 && minutes === 0)));
+        return isValidTime;
     }, {
-        message: "Reservation time must be between 19:00 and 24:00",
+        message: "Reservation time must be between 19:00 and 23:00",
     }),
 });
 exports.fetchReservationsSchema = zod_1.z.object({
-    reservationDateStart: zod_1.z.string().datetime({ message: "Start date for reservation must be a valid datetime string" }),
-    reservationDateEnd: zod_1.z.string().datetime({ message: "End date for reservation must be a valid datetime string" }),
+    reservationDateStart: zod_1.z
+        .string()
+        .datetime({
+        message: "Start date for reservation must be a valid datetime string",
+    }),
+    reservationDateEnd: zod_1.z
+        .string()
+        .datetime({
+        message: "End date for reservation must be a valid datetime string",
+    }),
     currentPage: zod_1.z
         .string()
         .transform((val) => parseInt(val, 10))
@@ -36,5 +44,7 @@ exports.fetchReservationsSchema = zod_1.z.object({
         .string()
         .transform((val) => parseInt(val, 10))
         .default("10")
-        .refine((val) => !isNaN(val), { message: "Items per page must be a number" }),
+        .refine((val) => !isNaN(val), {
+        message: "Items per page must be a number",
+    }),
 });

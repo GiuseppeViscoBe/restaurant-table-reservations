@@ -1,3 +1,4 @@
+import { endOfDay, startOfDay } from "date-fns";
 import { db } from "../config/database";
 import { Reservation, PaginatedReservations } from "../interfaces/reservation.interface";
 
@@ -32,6 +33,11 @@ const findReservationsByDateRange = async (
 ) : Promise<PaginatedReservations | undefined> => {
   const offset = (currentPage - 1) * itemsPerPage;
 
+  // const startOfDayStartDate = startOfDay(startDate); 
+  // const endOfDayStartDate = endOfDay(endDate);
+  // console.log()
+  // console.log(startOfDayStartDate)
+  // console.log(endOfDayStartDate)
   const pagedReservations = await db
     .selectFrom("reservations")
     .selectAll()

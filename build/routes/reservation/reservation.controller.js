@@ -12,32 +12,31 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getReservations = exports.createReservation = void 0;
 const reservation_model_1 = __importDefault(require("./../../models/reservation.model"));
-const user_model_1 = __importDefault(require("./../../models/user.model"));
 const reservation_validator_1 = require("./../../validators/reservation.validator");
+const user_utils_1 = __importDefault(require("./../../utils/user.utils"));
+const reservation_utils_1 = __importDefault(require("../../utils/reservation.utils"));
 //@desc Create new reservation
 //@route POST/reservations
 //@access public
 const createReservation = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        // const reservationTimet = req.body.reservationTime;
         const { userEmail, tableNumber, reservationTime } = reservation_validator_1.createReservationSchema.parse(req.body);
-        const existingUser = yield user_model_1.default.getUserByEmail(userEmail);
-        if (!existingUser) {
-            const error = new Error("User does not exists");
-            res.status(404);
-            return next(error);
+        yield user_utils_1.default.checkIfUserDoesNotExists(userEmail);
+        const [reservationTimeStartToDate, reservationTimeEndToDate] = reservation_utils_1.default.parseAndSetReservationTime(reservationTime);
+        console.log(reservationTimeStartToDate);
+        console.log(reservationTimeEndToDate);
+        const reservationsResult = yield reservation_utils_1.default.getReservationsByDateRange(reservationTimeStartToDate, reservationTimeEndToDate, 1, 10);
+        console.log('reservationsResult');
+        console.log(reservationsResult);
+        if (reservationsResult) {
+            console.log('checking');
+            reservation_utils_1.default.checkIfTableIsAlreadyBooked(reservationsResult === null || reservationsResult === void 0 ? void 0 : reservationsResult.pagedReservations, tableNumber);
         }
-        const reservationTimeStartToDate = new Date(reservationTime);
-        const reservationTimeEndToDate = new Date(new Date(reservationTime).setHours(new Date(reservationTime).getHours() + 1));
-        const reservationsResult = yield reservation_model_1.default.findReservationsByDateRange(reservationTimeStartToDate, reservationTimeEndToDate, 1, 10);
-        const isTableBooked = reservationsResult === null || reservationsResult === void 0 ? void 0 : reservationsResult.pagedReservations.some((reservation) => reservation.tableNumber === tableNumber);
-        if (isTableBooked) {
-            const error = new Error("Table is already booked for this time slot");
-            res.status(404);
-            return next(error);
-        }
+        console.log('test');
         const reservationTimeParsedToDate = new Date(reservationTime);
+        console.log(reservationTimeParsedToDate);
         const insertedReservation = yield reservation_model_1.default.createReservation({
             userEmail,
             tableNumber,
@@ -49,7 +48,6 @@ const createReservation = (req, res, next) => __awaiter(void 0, void 0, void 0, 
         next(error);
     }
 });
-exports.createReservation = createReservation;
 //@desc Get reservations by start date and end date
 //@route GET/reservations
 //@access public
@@ -58,15 +56,14 @@ const getReservations = (req, res, next) => __awaiter(void 0, void 0, void 0, fu
         const { reservationDateStart, reservationDateEnd, currentPage, itemsPerPage } = reservation_validator_1.fetchReservationsSchema.parse(req.query);
         const reservationDateStartToDate = new Date(reservationDateStart);
         const reservationDateEndToDate = new Date(reservationDateEnd);
-        const reservationsResult = yield reservation_model_1.default.findReservationsByDateRange(reservationDateStartToDate, reservationDateEndToDate, currentPage, itemsPerPage);
+        const reservationsResult = yield reservation_utils_1.default.getReservationsByDateRange(reservationDateStartToDate, reservationDateEndToDate, currentPage, itemsPerPage);
         res.status(200).json(reservationsResult);
     }
     catch (error) {
         next(error);
     }
 });
-exports.getReservations = getReservations;
 exports.default = {
-    createReservation: exports.createReservation,
-    getReservations: exports.getReservations,
+    createReservation,
+    getReservations,
 };

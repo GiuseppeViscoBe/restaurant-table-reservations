@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import userModel from "./../../models/user.model";
 import { createUserSchema } from "./../../validators/user.validator";
+import userUtils from './../../utils/user.utils'
 
 //@desc Create User
 //@route POST/user
@@ -11,17 +12,11 @@ const createUser = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    const { name, email } = createUserSchema.parse(req.body);
+    const { userName, userEmail } = createUserSchema.parse(req.body);
 
-    const existingUser = await userModel.getUserByEmail(email);
+    await userUtils.checkIfUserExists(userEmail);
 
-    if (existingUser) {
-      const error = new Error("User already exists");
-      res.status(409);
-      return next(error);
-    }
-
-    const insertedUser = await userModel.createUser({ name, email });
+    const insertedUser = await userModel.createUser({ userName, userEmail });
 
     res.status(200).json(insertedUser);
   } catch (error) {
@@ -30,3 +25,5 @@ const createUser = async (
 };
 
 export default { createUser };
+
+

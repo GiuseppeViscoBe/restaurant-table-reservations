@@ -1,22 +1,9 @@
 import { Kysely, MysqlDialect } from 'kysely';
 import { createPool } from 'mysql2';
 import dotenv from 'dotenv';
+import {Database} from './../interfaces/database.interface'
 
 dotenv.config();
-
-interface Database {
-  users: {
-    id?: number;
-    name: string;
-    email: string;
-  };
-  reservations: {
-    id?: number;
-    userEmail: string;
-    tableNumber: number;
-    reservationTime: Date;
-  };
-}
 
 const pool = createPool({
   host: process.env.MYSQL_HOST,

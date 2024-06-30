@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const constants_1 = require("./../constants");
 const errorHandler = (err, req, res, next) => {
-    const statusCode = res.statusCode ? res.statusCode : 500;
+    const statusCode = err.statusCode ? err.statusCode : 500;
     const environment = process.env.ENVIRONMENT;
     switch (statusCode) {
         case constants_1.errorConstants.VALIDATION_ERROR:
@@ -36,13 +36,6 @@ const errorHandler = (err, req, res, next) => {
         case constants_1.errorConstants.CONFLICT:
             res.json({
                 title: "Conflict",
-                message: err.message,
-                stackTrace: environment == 'development' ? err.stack : '',
-            });
-            break;
-        case constants_1.errorConstants.SERVER_ERROR:
-            res.json({
-                title: "Server Error",
                 message: err.message,
                 stackTrace: environment == 'development' ? err.stack : '',
             });

@@ -1,13 +1,15 @@
 import { Request, Response, NextFunction } from "express";
 import { errorConstants } from "./../constants";
+import { CustomError } from "../interfaces/error.interface";
+
 
 const errorHandler = (
-  err: any,
+  err: CustomError,
   req: Request,
   res: Response,
   next: NextFunction
 ) : void => {
-  const statusCode: number = res.statusCode ? res.statusCode : 500
+  const statusCode: number = err.statusCode ? err.statusCode : 500
   const environment = process.env.ENVIRONMENT
 
 
@@ -43,13 +45,6 @@ const errorHandler = (
     case errorConstants.CONFLICT:
       res.json({
         title: "Conflict",
-        message: err.message,
-        stackTrace: environment == 'development' ? err.stack : '',
-      });
-      break;
-    case errorConstants.SERVER_ERROR:
-      res.json({
-        title: "Server Error",
         message: err.message,
         stackTrace: environment == 'development' ? err.stack : '',
       });

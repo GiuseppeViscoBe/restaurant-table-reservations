@@ -14,19 +14,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const user_model_1 = __importDefault(require("./../../models/user.model"));
 const user_validator_1 = require("./../../validators/user.validator");
+const user_utils_1 = __importDefault(require("./../../utils/user.utils"));
 //@desc Create User
 //@route POST/user
 //@access public
 const createUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { name, email } = user_validator_1.createUserSchema.parse(req.body);
-        const existingUser = yield user_model_1.default.getUserByEmail(email);
-        if (existingUser) {
-            const error = new Error("User already exists");
-            res.status(409);
-            return next(error);
-        }
-        const insertedUser = yield user_model_1.default.createUser({ name, email });
+        const { userName, userEmail } = user_validator_1.createUserSchema.parse(req.body);
+        yield user_utils_1.default.checkIfUserExists(userEmail);
+        const insertedUser = yield user_model_1.default.createUser({ userName, userEmail });
         res.status(200).json(insertedUser);
     }
     catch (error) {

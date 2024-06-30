@@ -11,7 +11,7 @@ async function startServer() : Promise<void> {
         });
     } catch (error : any) {
         console.error(error.message);
-        process.exit(1); // Terminate the application with an error code
+        process.exit(1); 
     }
 }
 
