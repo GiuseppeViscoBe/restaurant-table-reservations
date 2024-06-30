@@ -31,12 +31,12 @@ npm install
 3. **Set Environment Variables**:
 Create a `.env` file in the root directory of the project and add the following variables:
 
-PORT
-MYSQL_HOST
-MYSQL_USER
-MYSQL_PASSWORD
-MYSQL_DATABASE
-ENVIRONMENT
+- PORT
+- MYSQL_HOST
+- MYSQL_USER
+- MYSQL_PASSWORD
+- MYSQL_DATABASE
+- ENVIRONMENT
 
 4. **Database Configuration**:
 - Set up a MySQL database and configure connection details in `config/database.ts`.
