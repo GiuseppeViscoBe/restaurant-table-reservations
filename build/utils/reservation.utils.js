@@ -16,14 +16,11 @@ exports.getReservationsByDateRange = void 0;
 const reservation_model_1 = __importDefault(require("../models/reservation.model"));
 const parseAndSetReservationTime = (reservationTime) => {
     const reservationTimeStartToDate = new Date(reservationTime);
-    const reservationTimeEndToDate = new Date(new Date(reservationTime).setMinutes(new Date(reservationTime).getMinutes() + 59));
-    console.log('start: ' + reservationTimeStartToDate);
-    console.log('end: ' + reservationTimeEndToDate);
+    const reservationTimeEndToDate = new Date(new Date(reservationTime).setUTCMinutes(new Date(reservationTime).getUTCMinutes() + 59));
     return [reservationTimeStartToDate, reservationTimeEndToDate];
 };
 const checkIfTableIsAlreadyBooked = (reservations, tableNumber) => {
     const isTableBooked = reservations.some((reservation) => reservation.tableNumber === tableNumber);
-    console.log(isTableBooked);
     if (isTableBooked) {
         const error = new Error("Table is already booked for this time slot");
         error.statusCode = 404;

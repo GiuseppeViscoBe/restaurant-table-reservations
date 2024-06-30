@@ -25,9 +25,6 @@ const createReservation = (req, res, next) => __awaiter(void 0, void 0, void 0, 
         yield user_utils_1.default.checkIfUserDoesNotExists(userEmail);
         const [reservationTimeStartToDate, reservationTimeEndToDate] = reservation_utils_1.default.parseAndSetReservationTime(reservationTime);
         const reservationsResult = yield reservation_utils_1.default.getReservationsByDateRange(reservationTimeStartToDate, reservationTimeEndToDate, 1, 10);
-        // console.log('start: ' + reservationTimeStartToDate)
-        // console.log('end: ' + reservationTimeEndToDate)
-        console.log(reservationsResult);
         if (reservationsResult) {
             reservation_utils_1.default.checkIfTableIsAlreadyBooked(reservationsResult === null || reservationsResult === void 0 ? void 0 : reservationsResult.pagedReservations, tableNumber);
         }

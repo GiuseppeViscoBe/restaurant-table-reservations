@@ -25,10 +25,6 @@ const createReservation = async (
 
     const reservationsResult = await reservationUtils.getReservationsByDateRange(reservationTimeStartToDate,reservationTimeEndToDate,1,10)
 
-    // console.log('start: ' + reservationTimeStartToDate)
-    // console.log('end: ' + reservationTimeEndToDate)
-
-    console.log(reservationsResult)
     if (reservationsResult) {
       reservationUtils.checkIfTableIsAlreadyBooked(
         reservationsResult?.pagedReservations,
