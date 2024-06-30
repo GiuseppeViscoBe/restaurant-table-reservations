@@ -14,7 +14,7 @@ This application is a reservation system designed to manage reservations and use
 - **Express.js**: Web application framework for Node.js.
 - **MySQL**: Database management system used for storing reservations and user data.
 - **TypeScript**: Programming language for type-safe development.
-- **Joi**: Schema validation library for validating request data.
+- **Zod**: Schema validation library for validating request data.
 
 ### Installation
 To run the application locally, follow these steps:
