@@ -16,34 +16,28 @@ const createReservation = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    // const reservationTimet = req.body.reservationTime;
-    
+
     const { userEmail, tableNumber, reservationTime } = createReservationSchema.parse(req.body);
 
     await userUtils.checkIfUserDoesNotExists(userEmail);
 
     const [reservationTimeStartToDate, reservationTimeEndToDate] = reservationUtils.parseAndSetReservationTime(reservationTime);
 
-    console.log(reservationTimeStartToDate)
-    console.log(reservationTimeEndToDate)
-    
     const reservationsResult = await reservationUtils.getReservationsByDateRange(reservationTimeStartToDate,reservationTimeEndToDate,1,10)
 
+    // console.log('start: ' + reservationTimeStartToDate)
+    // console.log('end: ' + reservationTimeEndToDate)
 
-    console.log('reservationsResult')
     console.log(reservationsResult)
-
     if (reservationsResult) {
-      console.log('checking')
       reservationUtils.checkIfTableIsAlreadyBooked(
         reservationsResult?.pagedReservations,
         tableNumber
       );
     }
 
-console.log('test')
     const reservationTimeParsedToDate = new Date(reservationTime);
-console.log(reservationTimeParsedToDate)
+
     const insertedReservation = await reservationModel.createReservation({
       userEmail,
       tableNumber,

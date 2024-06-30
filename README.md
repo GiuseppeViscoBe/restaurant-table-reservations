@@ -53,6 +53,7 @@ The server will start running at `http://localhost:{PORT}`.
 - Creates a new reservation.
 - Requires `userEmail`, `tableNumber`, and `reservationTime` in the request body.
 - Validates if the user exists and if the table is available for booking.
+- Reservations can be made between 19:00 and 23:00, with one-hour time slots at 19:00, 20:00, 21:00, 22:00, and 23:00.
 
 #### List Reservations
 - **GET /reservations**

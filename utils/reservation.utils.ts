@@ -5,8 +5,11 @@ import reservationModel from "../models/reservation.model";
 const parseAndSetReservationTime = (reservationTime: string): [Date, Date] => {
     const reservationTimeStartToDate = new Date(reservationTime);
     const reservationTimeEndToDate = new Date(
-      new Date(reservationTime).setHours(new Date(reservationTime).getHours() + 1)
+      new Date(reservationTime).setMinutes(new Date(reservationTime).getMinutes() + 59)
     );
+
+    console.log('start: ' + reservationTimeStartToDate)
+    console.log('end: ' + reservationTimeEndToDate)
     return [reservationTimeStartToDate, reservationTimeEndToDate];
   };
   
@@ -16,6 +19,7 @@ const parseAndSetReservationTime = (reservationTime: string): [Date, Date] => {
   ): void => {
     const isTableBooked = reservations.some((reservation) => reservation.tableNumber === tableNumber);
   
+    console.log(isTableBooked)
     if (isTableBooked) {
       const error: CustomError = new Error("Table is already booked for this time slot");
       error.statusCode = 404;

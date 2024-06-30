@@ -21,22 +21,17 @@ const reservation_utils_1 = __importDefault(require("../../utils/reservation.uti
 //@access public
 const createReservation = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        // const reservationTimet = req.body.reservationTime;
         const { userEmail, tableNumber, reservationTime } = reservation_validator_1.createReservationSchema.parse(req.body);
         yield user_utils_1.default.checkIfUserDoesNotExists(userEmail);
         const [reservationTimeStartToDate, reservationTimeEndToDate] = reservation_utils_1.default.parseAndSetReservationTime(reservationTime);
-        console.log(reservationTimeStartToDate);
-        console.log(reservationTimeEndToDate);
         const reservationsResult = yield reservation_utils_1.default.getReservationsByDateRange(reservationTimeStartToDate, reservationTimeEndToDate, 1, 10);
-        console.log('reservationsResult');
+        // console.log('start: ' + reservationTimeStartToDate)
+        // console.log('end: ' + reservationTimeEndToDate)
         console.log(reservationsResult);
         if (reservationsResult) {
-            console.log('checking');
             reservation_utils_1.default.checkIfTableIsAlreadyBooked(reservationsResult === null || reservationsResult === void 0 ? void 0 : reservationsResult.pagedReservations, tableNumber);
         }
-        console.log('test');
         const reservationTimeParsedToDate = new Date(reservationTime);
-        console.log(reservationTimeParsedToDate);
         const insertedReservation = yield reservation_model_1.default.createReservation({
             userEmail,
             tableNumber,

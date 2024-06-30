@@ -18,10 +18,10 @@ exports.createReservationSchema = zod_1.z.object({
         const date = new Date(time);
         const hours = date.getUTCHours();
         const minutes = date.getUTCMinutes();
-        const isValidTime = !isNaN(date.getTime()) && (hours >= 19 && (hours < 23 || (hours === 23 && minutes === 0)));
+        const isValidTime = !isNaN(date.getTime()) && (hours >= 19 && hours <= 23 && minutes === 0);
         return isValidTime;
     }, {
-        message: "Reservation time must be between 19:00 and 23:00",
+        message: "Reservation time must be on the hour between 19:00 and 23:00",
     }),
 });
 exports.fetchReservationsSchema = zod_1.z.object({
