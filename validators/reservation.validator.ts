@@ -29,14 +29,14 @@ export const createReservationSchema = z.object({
 });
 
 export const fetchReservationsSchema = z.object({
-  start_date: z.string().datetime({ message: "Start date must be a valid datetime string" }),
-  end_date: z.string().datetime({ message: "End date must be a valid datetime string" }),
-  current_page: z
+  reservationDateStart: z.string().datetime({ message: "Start date for reservation must be a valid datetime string" }),
+  reservationDateEnd: z.string().datetime({ message: "End date for reservation must be a valid datetime string" }),
+  currentPage: z
     .string()
     .transform((val) => parseInt(val, 10))
     .default("1")
     .refine((val) => !isNaN(val), { message: "Current page must be a number" }),
-  items_per_page: z
+  itemsPerPage: z
     .string()
     .transform((val) => parseInt(val, 10))
     .default("10")

@@ -12,7 +12,7 @@ interface Database {
   };
   reservations: {
     id?: number;
-    userId: number;
+    userEmail: string;
     tableNumber: number;
     reservationTime: Date;
   };

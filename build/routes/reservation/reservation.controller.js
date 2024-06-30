@@ -22,18 +22,15 @@ const reservation_validator_1 = require("./../../validators/reservation.validato
 const createReservation = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { userEmail, tableNumber, reservationTime } = reservation_validator_1.createReservationSchema.parse(req.body);
-        //è necessario questo controllo ?
         const existingUser = yield user_model_1.default.getUserByEmail(userEmail);
         if (!existingUser) {
             const error = new Error("User does not exists");
             res.status(404);
             return next(error);
         }
-        //ignorare l'ora nel momento in cui fa il fetch delle prenotazioni ? 
-        //validare anche qui la request
-        const reservationTimeStartToString = new Date(reservationTime).toISOString();
-        const reservationTimeEndToString = new Date(new Date(reservationTime).setHours(new Date(reservationTime).getHours() + 1)).toISOString();
-        const reservationsResult = yield reservation_model_1.default.findReservationsByDateRange(reservationTimeStartToString, reservationTimeEndToString, 1, 10);
+        const reservationTimeStartToDate = new Date(reservationTime);
+        const reservationTimeEndToDate = new Date(new Date(reservationTime).setHours(new Date(reservationTime).getHours() + 1));
+        const reservationsResult = yield reservation_model_1.default.findReservationsByDateRange(reservationTimeStartToDate, reservationTimeEndToDate, 1, 10);
         const isTableBooked = reservationsResult === null || reservationsResult === void 0 ? void 0 : reservationsResult.pagedReservations.some((reservation) => reservation.tableNumber === tableNumber);
         if (isTableBooked) {
             const error = new Error("Table is already booked for this time slot");
@@ -58,10 +55,11 @@ exports.createReservation = createReservation;
 //@access public
 const getReservations = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { start_date, end_date, current_page, items_per_page } = reservation_validator_1.fetchReservationsSchema.parse(req.query);
-        const reservationsResult = yield reservation_model_1.default.findReservationsByDateRange(start_date, end_date, current_page, items_per_page);
+        const { reservationDateStart, reservationDateEnd, currentPage, itemsPerPage } = reservation_validator_1.fetchReservationsSchema.parse(req.query);
+        const reservationDateStartToDate = new Date(reservationDateStart);
+        const reservationDateEndToDate = new Date(reservationDateEnd);
+        const reservationsResult = yield reservation_model_1.default.findReservationsByDateRange(reservationDateStartToDate, reservationDateEndToDate, currentPage, itemsPerPage);
         res.status(200).json(reservationsResult);
-        //gestire il caso in cui non ci siano prenotazioni per quella data e ora ??
     }
     catch (error) {
         next(error);

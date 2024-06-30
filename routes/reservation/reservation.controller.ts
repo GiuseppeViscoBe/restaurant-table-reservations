@@ -18,7 +18,7 @@ export const createReservation = async (
   try {
     const { userEmail, tableNumber, reservationTime } = createReservationSchema.parse(req.body);
 
-    //è necessario questo controllo ?
+    
     const existingUser = await userModel.getUserByEmail(userEmail);
 
     if (!existingUser) {
@@ -28,19 +28,16 @@ export const createReservation = async (
     }
 
 
-    //ignorare l'ora nel momento in cui fa il fetch delle prenotazioni ? 
-    //validare anche qui la request
-
-    const reservationTimeStartToString = new Date(reservationTime).toISOString()
-    const reservationTimeEndToString = new Date(
+    const reservationTimeStartToDate = new Date(reservationTime)
+    const reservationTimeEndToDate = new Date(
       new Date(reservationTime).setHours(
         new Date(reservationTime).getHours() + 1
       )
-    ).toISOString()
+    )
 
     const reservationsResult = await reservationModel.findReservationsByDateRange(
-      reservationTimeStartToString,
-      reservationTimeEndToString,
+      reservationTimeStartToDate,
+      reservationTimeEndToDate,
       1,
       10
     );
@@ -77,18 +74,20 @@ export const createReservation = async (
 export const getReservations = async (req: Request, res: Response, next: NextFunction) : Promise<void> => {
   try {
 
-    const { start_date, end_date, current_page , items_per_page } = fetchReservationsSchema.parse(req.query);
+    const { reservationDateStart, reservationDateEnd, currentPage , itemsPerPage } = fetchReservationsSchema.parse(req.query);
 
-    
+    const reservationDateStartToDate = new Date(reservationDateStart)
+    const reservationDateEndToDate = new Date(reservationDateEnd)
+
     const reservationsResult = await reservationModel.findReservationsByDateRange(
-      start_date,
-      end_date,
-      current_page,
-      items_per_page
+      reservationDateStartToDate,
+      reservationDateEndToDate,
+      currentPage,
+      itemsPerPage
     );
 
     res.status(200).json(reservationsResult);
-    //gestire il caso in cui non ci siano prenotazioni per quella data e ora ??
+    
   } catch (error: any) {
     next(error)
   }

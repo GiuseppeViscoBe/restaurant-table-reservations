@@ -25,14 +25,14 @@ exports.createReservationSchema = zod_1.z.object({
     }),
 });
 exports.fetchReservationsSchema = zod_1.z.object({
-    start_date: zod_1.z.string().datetime({ message: "Start date must be a valid datetime string" }),
-    end_date: zod_1.z.string().datetime({ message: "End date must be a valid datetime string" }),
-    current_page: zod_1.z
+    reservationDateStart: zod_1.z.string().datetime({ message: "Start date for reservation must be a valid datetime string" }),
+    reservationDateEnd: zod_1.z.string().datetime({ message: "End date for reservation must be a valid datetime string" }),
+    currentPage: zod_1.z
         .string()
         .transform((val) => parseInt(val, 10))
         .default("1")
         .refine((val) => !isNaN(val), { message: "Current page must be a number" }),
-    items_per_page: zod_1.z
+    itemsPerPage: zod_1.z
         .string()
         .transform((val) => parseInt(val, 10))
         .default("10")

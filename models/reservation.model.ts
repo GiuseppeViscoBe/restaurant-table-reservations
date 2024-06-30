@@ -25,25 +25,20 @@ const getReservationById = async (id: any) : Promise<Reservation | undefined>  =
 };
 
 const findReservationsByDateRange = async (
-  startDate: string,
-  endDate: string,
+  startDate: Date,
+  endDate: Date,
   currentPage: number,
   itemsPerPage: number
 ) : Promise<PaginatedReservations | undefined> => {
-  const start = new Date(startDate).toISOString();
-  const end = new Date(endDate).toISOString();
   const offset = (currentPage - 1) * itemsPerPage;
-
-  console.log("Start Date:", start);
-  console.log("End Date:", end);
 
   const pagedReservations = await db
     .selectFrom("reservations")
     .selectAll()
     .limit(itemsPerPage)
     .offset(offset)
-    .where("reservationTime", ">=", new Date(startDate))
-    .where("reservationTime", "<=", new Date(endDate))
+    .where("reservationTime", ">=", startDate)
+    .where("reservationTime", "<=", endDate)
     .execute();
 
   const reservationsCount = await db
