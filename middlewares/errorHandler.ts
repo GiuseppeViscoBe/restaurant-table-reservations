@@ -6,7 +6,7 @@ const errorHandler = (
   req: Request,
   res: Response,
   next: NextFunction
-) => {
+) : void => {
   const statusCode: number = res.statusCode ? res.statusCode : 500
   const environment = process.env.ENVIRONMENT
 

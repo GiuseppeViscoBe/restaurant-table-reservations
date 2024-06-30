@@ -14,40 +14,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const user_model_1 = __importDefault(require("./../../models/user.model"));
 const user_validator_1 = require("./../../validators/user.validator");
-// const getUserByEmail = async (
-//   req: Request,
-//   res: Response,
-//   next: NextFunction
-// ) => {
-//   try {
-//     const { email } = req.params;
-//     console.log(email);
-//     const existingUser = await userModel.getUserByEmail(email);
-//     if (existingUser) {
-//         const error = new Error("User already exists");
-//         res.status(403);
-//         return next(error);
-//     }
-//     res.status(200).json({ existingUser });
-//   } catch (error) {
-//     next(error);
-//   }
-// };
-// const getUserByEmail = asyncHandler(async (
-//     req: Request,
-//     res: Response,
-//     next: NextFunction
-//   ) => {
-//       const { email } = req.params;
-//       console.log(email);
-//       const existingUser = await userModel.getUserByEmail(email);
-//       if (!existingUser) {
-//           const error = new Error("User does not exists");
-//           res.status(404);
-//           return next(error);
-//       }
-//       res.status(200).json({ existingUser });   
-//   });
 //@desc Create User
 //@route POST/user
 //@access public

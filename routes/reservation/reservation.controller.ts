@@ -16,10 +16,10 @@ export const createReservation = async (
   next: NextFunction
 ) : Promise<void> => {
   try {
-    const { userId, tableNumber, reservationTime } = createReservationSchema.parse(req.body);
+    const { userEmail, tableNumber, reservationTime } = createReservationSchema.parse(req.body);
 
     //è necessario questo controllo ?
-    const existingUser = await userModel.getUserById(userId);
+    const existingUser = await userModel.getUserByEmail(userEmail);
 
     if (!existingUser) {
       const error = new Error("User does not exists");
@@ -57,11 +57,12 @@ export const createReservation = async (
 
     const reservationTimeParsedToDate = new Date(reservationTime);
 
-    const insertedReservation = reservationModel.createReservation({
-      userId,
+    const insertedReservation = await reservationModel.createReservation({
+      userEmail,
       tableNumber,
       reservationTime: reservationTimeParsedToDate,
     });
+
 
     res.status(201).json(insertedReservation);
 

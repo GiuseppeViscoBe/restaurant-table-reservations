@@ -1,11 +1,17 @@
 import { z } from "zod";
 
 export const createReservationSchema = z.object({
-  userId: z.number(),
-  tableNumber: z.number().min(1).max(5),
+  userEmail: z
+    .string()
+    .min(1, { message: "Email must not be empty" })
+    .email({ message: "Email format not valid" }),
+  tableNumber: z
+    .number()
+    .min(1, { message: "Table number must be at least 1" })
+    .max(5, { message: "Table number must be at most 5" }),
   reservationTime: z
     .string()
-    .datetime()
+    .datetime({ message: "Reservation time must be a valid datetime string" })
     .refine(
       (time) => {
         const date = new Date(time);
@@ -22,16 +28,17 @@ export const createReservationSchema = z.object({
     ),
 });
 
-
 export const fetchReservationsSchema = z.object({
-  start_date: z.string().datetime(),
-  end_date: z.string().datetime(),
+  start_date: z.string().datetime({ message: "Start date must be a valid datetime string" }),
+  end_date: z.string().datetime({ message: "End date must be a valid datetime string" }),
   current_page: z
     .string()
     .transform((val) => parseInt(val, 10))
-    .default("1"),
+    .default("1")
+    .refine((val) => !isNaN(val), { message: "Current page must be a number" }),
   items_per_page: z
     .string()
     .transform((val) => parseInt(val, 10))
-    .default("10"),
+    .default("10")
+    .refine((val) => !isNaN(val), { message: "Items per page must be a number" }),
 });

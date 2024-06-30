@@ -14,7 +14,7 @@ const createUser = (user) => __awaiter(void 0, void 0, void 0, function* () {
     const insertedUserResult = yield database_1.db
         .insertInto("users")
         .values(user)
-        .executeTakeFirstOrThrow();
+        .executeTakeFirst();
     const createdUser = yield getUserById(insertedUserResult.insertId);
     return createdUser;
 });
@@ -31,7 +31,7 @@ const getUserById = (id) => __awaiter(void 0, void 0, void 0, function* () {
         .selectFrom("users")
         .selectAll()
         .where("id", "=", id)
-        .executeTakeFirst();
+        .executeTakeFirstOrThrow();
     return userResultById;
 });
 exports.default = {

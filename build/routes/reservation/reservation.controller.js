@@ -21,9 +21,9 @@ const reservation_validator_1 = require("./../../validators/reservation.validato
 //@access public
 const createReservation = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { userId, tableNumber, reservationTime } = reservation_validator_1.createReservationSchema.parse(req.body);
+        const { userEmail, tableNumber, reservationTime } = reservation_validator_1.createReservationSchema.parse(req.body);
         //è necessario questo controllo ?
-        const existingUser = yield user_model_1.default.getUserById(userId);
+        const existingUser = yield user_model_1.default.getUserByEmail(userEmail);
         if (!existingUser) {
             const error = new Error("User does not exists");
             res.status(404);
@@ -41,8 +41,8 @@ const createReservation = (req, res, next) => __awaiter(void 0, void 0, void 0, 
             return next(error);
         }
         const reservationTimeParsedToDate = new Date(reservationTime);
-        const insertedReservation = reservation_model_1.default.createReservation({
-            userId,
+        const insertedReservation = yield reservation_model_1.default.createReservation({
+            userEmail,
             tableNumber,
             reservationTime: reservationTimeParsedToDate,
         });

@@ -6,7 +6,7 @@ const createUser = async (user: User) : Promise<User | undefined> => {
   const insertedUserResult = await db
     .insertInto("users")
     .values(user)
-    .executeTakeFirstOrThrow();
+    .executeTakeFirst();
 
   const createdUser = await getUserById(insertedUserResult.insertId);
 
@@ -28,7 +28,7 @@ const getUserById = async (id: any) : Promise<User | undefined> => {
     .selectFrom("users")
     .selectAll()
     .where("id", "=", id)
-    .executeTakeFirst();
+    .executeTakeFirstOrThrow();
 
     return userResultById
 };
