@@ -1,0 +1,171 @@
+openapi: 3.0.0
+info:
+  title: Restaurant Reservation API
+  description: API for managing restaurant reservations
+  version: 1.0.0
+servers:
+  - url: http://localhost:8001/api
+paths:
+  /reservations:
+    post:
+      summary: Create a reservation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateReservationRequest'
+      responses:
+        '200':
+          description: Successful creation of reservation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Reservation'
+    get:
+      summary: Get reservations by date range
+      parameters:
+        - in: query
+          name: reservationDateStart
+          required: true
+          schema:
+            type: string
+            format: date-time
+          description: Start date for reservations (inclusive)
+        - in: query
+          name: reservationDateEnd
+          required: true
+          schema:
+            type: string
+            format: date-time
+          description: End date for reservations (inclusive)
+        - in: query
+          name: currentPage
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+          description: Current page of results
+        - in: query
+          name: itemsPerPage
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 10
+          description: Number of items per page
+      responses:
+        '200':
+          description: Successful retrieval of reservations
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedReservations'
+  /users:
+    post:
+      summary: Create a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUserRequest'
+      responses:
+        '200':
+          description: Successful creation of user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: John Doe
+        email:
+          type: string
+          example: john.doe@example.com
+    Reservation:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        userEmail:
+          type: string
+          example: john.doe@example.com
+        tableNumber:
+          type: integer
+          example: 3
+        reservationTime:
+          type: string
+          format: date-time
+          example: '2024-07-01T19:30:00Z'
+    PaginatedReservations:
+      type: object
+      properties:
+        pagedReservations:
+          type: array
+          items:
+            $ref: '#/components/schemas/Reservation'
+        totalPages:
+          type: integer
+          example: 3
+        currentPage:
+          type: integer
+          example: 1
+    CreateReservationRequest:
+      type: object
+      properties:
+        userEmail:
+          type: string
+          minLength: 1
+          format: email
+          example: john.doe@example.com
+        tableNumber:
+          type: integer
+          minimum: 1
+          maximum: 5
+          example: 3
+        reservationTime:
+          type: string
+          format: date-time
+          example: '2024-07-01T19:30:00Z'
+    FetchReservationsQueryParams:
+      type: object
+      properties:
+        reservationDateStart:
+          type: string
+          format: date-time
+          example: '2024-07-01T00:00:00Z'
+        reservationDateEnd:
+          type: string
+          format: date-time
+          example: '2024-07-07T23:59:59Z'
+        currentPage:
+          type: integer
+          minimum: 1
+          example: 1
+        itemsPerPage:
+          type: integer
+          minimum: 1
+          maximum: 100
+          example: 10
+    CreateUserRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          example: John Doe
+        email:
+          type: string
+          format: email
+          example: john.doe@example.com

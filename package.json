@@ -1,0 +1,39 @@
+{
+  "name": "table-reservation",
+  "version": "1.0.0",
+  "description": "Api for restaurant reservation service",
+  "main": "server.js",
+  "scripts": {
+    "test": "jest --coverage",
+    "test:watch": "jest --watch",
+    "build": "concurrently \"rimraf build\"\"npx tsc\"",
+    "prestart": "npm run build",
+    "start": "node build/server.js",
+    "predev": "npm run build",
+    "dev": "concurrently \"npx tsc -w\" \"nodemon build/server.js\""
+  },
+  "author": "Giuseppe Visco",
+  "license": "ISC",
+  "dependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.14.8",
+    "concurrently": "^8.2.2",
+    "cors": "^2.8.5",
+    "date-fns": "^3.6.0",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "express-async-handler": "^1.2.0",
+    "kysely": "^0.27.3",
+    "mysql": "^2.18.1",
+    "mysql2": "^3.10.1",
+    "typescript": "^5.5.2",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/mysql": "^2.15.26",
+    "nodemon": "^3.1.4",
+    "rimraf": "^5.0.7",
+    "ts-jest": "^29.1.5"
+  }
+}
