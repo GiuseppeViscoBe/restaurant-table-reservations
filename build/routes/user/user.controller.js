@@ -12,9 +12,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const user_model_1 = __importDefault(require("./../../models/user.model"));
-const user_validator_1 = require("./../../validators/user.validator");
-const user_utils_1 = __importDefault(require("./../../utils/user.utils"));
+const user_model_1 = __importDefault(require("../../models/user.model"));
+const user_validator_1 = require("../../validators/user.validator");
+const user_utils_1 = __importDefault(require("../../utils/user.utils"));
 //@desc Create User
 //@route POST/user
 //@access public

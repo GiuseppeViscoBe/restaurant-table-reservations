@@ -12,9 +12,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const reservation_model_1 = __importDefault(require("./../../models/reservation.model"));
-const reservation_validator_1 = require("./../../validators/reservation.validator");
-const user_utils_1 = __importDefault(require("./../../utils/user.utils"));
+const reservation_model_1 = __importDefault(require("../../models/reservation.model"));
+const reservation_validator_1 = require("../../validators/reservation.validator");
+const user_utils_1 = __importDefault(require("../../utils/user.utils"));
 const reservation_utils_1 = __importDefault(require("../../utils/reservation.utils"));
 //@desc Create new reservation
 //@route POST/reservations

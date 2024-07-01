@@ -31,15 +31,24 @@ exports.db = new kysely_1.Kysely({
     dialect: new kysely_1.MysqlDialect({ pool })
 });
 const verifyDatabaseConnection = () => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        yield pool
-            .promise()
-            .query('SELECT 1');
-        console.log('Database connection established');
+    let isConnected = false;
+    let attempts = 0;
+    const maxAttempts = Number(process.env.MAX_ATTEMPTS);
+    const retryInterval = Number(process.env.RETRY_INTERVAL); // Milliseconds
+    while (!isConnected && attempts < maxAttempts) {
+        try {
+            yield pool.promise().query('SELECT 1');
+            console.log('Database connection established');
+            isConnected = true;
+        }
+        catch (error) {
+            attempts++;
+            console.error(`Attempt ${attempts} failed. Retrying in ${retryInterval / 1000} seconds...`);
+            yield new Promise(resolve => setTimeout(resolve, retryInterval));
+        }
     }
-    catch (error) {
-        console.error('Database connection error:', error);
-        throw new Error('Failed to connect to the database');
+    if (!isConnected) {
+        console.error('Failed to establish database connection after multiple attempts.');
     }
 });
 exports.verifyDatabaseConnection = verifyDatabaseConnection;
