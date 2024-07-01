@@ -68,7 +68,7 @@ The server will start running at `http://localhost:{PORT}`.
 
 ### Error Handling
 - Errors are handled gracefully and returned with appropriate HTTP status codes.
-- Validation errors are handled using Joi for request data validation.
+- Validation errors are handled using Zod for request data validation.
 - Custom error messages provide clear feedback to users and developers.
 
 
