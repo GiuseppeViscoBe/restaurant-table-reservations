@@ -9,7 +9,7 @@ services:
       - db
     environment:
       - PORT=${PORT}
-      - MYSQL_HOST=db
+      - MYSQL_HOST=host.docker.internal
       - MYSQL_USER=${MYSQL_USER}
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
       - MYSQL_DATABASE=${MYSQL_DATABASE}
@@ -27,6 +27,5 @@ services:
     volumes:
       - db_data:/var/lib/mysql
       - ./schema.sql:/docker-entrypoint-initdb.d/schema.sql
-
 volumes:
   db_data:

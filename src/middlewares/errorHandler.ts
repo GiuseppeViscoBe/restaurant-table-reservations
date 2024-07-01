@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { errorConstants } from "../../constants";
+import { errorConstants } from "../constants";
 import { CustomError } from "../interfaces/error.interface";
 
 
