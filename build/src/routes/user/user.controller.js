@@ -12,21 +12,21 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const app_1 = __importDefault(require("./src/config/app"));
-const database_1 = require("./src/config/database");
-const PORT = Number(process.env.PORT) || 8000;
-function startServer() {
-    return __awaiter(this, void 0, void 0, function* () {
-        try {
-            yield (0, database_1.verifyDatabaseConnection)();
-            app_1.default.listen(PORT, () => {
-                console.log(`Server running on port ${PORT}`);
-            });
-        }
-        catch (error) {
-            console.error(error.message);
-            process.exit(1);
-        }
-    });
-}
-startServer();
+const user_model_1 = __importDefault(require("../../models/user.model"));
+const user_validator_1 = require("../../validators/user.validator");
+const user_utils_1 = __importDefault(require("../../utils/user.utils"));
+//@desc Create User
+//@route POST/user
+//@access public
+const createUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { userName, userEmail } = user_validator_1.createUserSchema.parse(req.body);
+        yield user_utils_1.default.checkIfUserExists(userEmail);
+        const insertedUser = yield user_model_1.default.createUser({ userName, userEmail });
+        res.status(200).json(insertedUser);
+    }
+    catch (error) {
+        next(error);
+    }
+});
+exports.default = { createUser };

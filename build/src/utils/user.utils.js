@@ -12,21 +12,24 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const app_1 = __importDefault(require("./src/config/app"));
-const database_1 = require("./src/config/database");
-const PORT = Number(process.env.PORT) || 8000;
-function startServer() {
-    return __awaiter(this, void 0, void 0, function* () {
-        try {
-            yield (0, database_1.verifyDatabaseConnection)();
-            app_1.default.listen(PORT, () => {
-                console.log(`Server running on port ${PORT}`);
-            });
-        }
-        catch (error) {
-            console.error(error.message);
-            process.exit(1);
-        }
-    });
-}
-startServer();
+const user_model_1 = __importDefault(require("../models/user.model"));
+const checkIfUserExists = (email) => __awaiter(void 0, void 0, void 0, function* () {
+    const existingUser = yield user_model_1.default.getUserByEmail(email);
+    if (existingUser) {
+        const error = new Error("User already exists");
+        error.statusCode = 409;
+        throw error;
+    }
+});
+const checkIfUserDoesNotExists = (email) => __awaiter(void 0, void 0, void 0, function* () {
+    const existingUser = yield user_model_1.default.getUserByEmail(email);
+    if (!existingUser) {
+        const error = new Error("User does not exists");
+        error.statusCode = 404;
+        throw error;
+    }
+});
+exports.default = {
+    checkIfUserExists,
+    checkIfUserDoesNotExists
+};

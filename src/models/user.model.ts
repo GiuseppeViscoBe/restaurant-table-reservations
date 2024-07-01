@@ -1,5 +1,5 @@
 import { db } from "../config/database";
-import {User} from "./../interfaces/user.interface"
+import {User} from "../interfaces/user.interface"
 
 
 const createUser = async (user: User) : Promise<User | undefined> => {

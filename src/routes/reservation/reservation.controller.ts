@@ -1,10 +1,10 @@
 import { NextFunction, Request, Response } from "express";
-import reservationModel from "./../../models/reservation.model";
+import reservationModel from "../../models/reservation.model";
 import {
   createReservationSchema,
   fetchReservationsSchema,
-} from "./../../validators/reservation.validator";
-import userUtils from "./../../utils/user.utils";
+} from "../../validators/reservation.validator";
+import userUtils from "../../utils/user.utils";
 import reservationUtils from "../../utils/reservation.utils";
 
 //@desc Create new reservation

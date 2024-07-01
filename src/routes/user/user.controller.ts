@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
-import userModel from "./../../models/user.model";
-import { createUserSchema } from "./../../validators/user.validator";
-import userUtils from './../../utils/user.utils'
+import userModel from "../../models/user.model";
+import { createUserSchema } from "../../validators/user.validator";
+import userUtils from '../../utils/user.utils'
 
 //@desc Create User
 //@route POST/user

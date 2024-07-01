@@ -1,7 +1,7 @@
 import { Kysely, MysqlDialect } from 'kysely';
 import { createPool } from 'mysql2';
 import dotenv from 'dotenv';
-import {Database} from './../interfaces/database.interface'
+import {Database} from '../interfaces/database.interface'
 
 dotenv.config();
 

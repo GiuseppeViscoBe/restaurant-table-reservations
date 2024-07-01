@@ -1,5 +1,5 @@
-import app from './config/app';
-import { verifyDatabaseConnection } from './config/database';
+import app from './src/config/app';
+import { verifyDatabaseConnection } from './src/config/database';
 
 const PORT : Number = Number(process.env.PORT) || 8000;
 
