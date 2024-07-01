@@ -20,14 +20,26 @@ export const db = new Kysely<Database>({
   dialect: new MysqlDialect({ pool })
 });
 
-export const verifyDatabaseConnection = async () => {
-  try {
-    await pool
-        .promise()
-        .query('SELECT 1');
-    console.log('Database connection established');
-  } catch (error) {
-    console.error('Database connection error:', error);
-    throw new Error('Failed to connect to the database');
+export const verifyDatabaseConnection = async (): Promise<void> => {
+  let isConnected = false;
+  let attempts = 0;
+  const maxAttempts =  Number(process.env.MAX_ATTEMPTS)
+  const retryInterval = Number(process.env.RETRY_INTERVAL); // Milliseconds
+  
+  while (!isConnected && attempts < maxAttempts) {
+    try {
+      await pool.promise().query('SELECT 1');
+      console.log('Database connection established');
+      isConnected = true;
+    } catch (error) {
+      attempts++;
+      console.error(`Attempt ${attempts} failed. Retrying in ${retryInterval / 1000} seconds...`);
+      await new Promise(resolve => setTimeout(resolve, retryInterval));
+    }
+  }
+  
+  if (!isConnected) {
+    console.error('Failed to establish database connection after multiple attempts.');
   }
 };
+

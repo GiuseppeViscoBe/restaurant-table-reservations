@@ -37,6 +37,8 @@ Create a `.env` file in the root directory of the project and add the following 
 - MYSQL_PASSWORD
 - MYSQL_DATABASE
 - ENVIRONMENT
+- MAX_ATTEMPTS
+- RETRY_INTERVAL
 
 4. **Database Configuration**:
 - Set up a MySQL database and configure connection details in `config/database.ts`.
