@@ -63,7 +63,7 @@ The server will start running at `http://localhost:{PORT}`.
 #### Create User
 - **POST /user**
 - Creates a new user account.
-- Requires `userName` and `usreEmail` in the request body.
+- Requires `userName` and `userEmail` in the request body.
 - Checks if the user already exists before creating a new account.
 
 ### Error Handling
