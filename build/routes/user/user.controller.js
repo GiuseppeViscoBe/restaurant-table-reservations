@@ -37,7 +37,7 @@ const createUser = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
         const existingUser = yield user_utils_1.default.checkIfUserExists(userEmail);
         if (existingUser !== undefined || existingUser !== null) {
             const error = new Error("User already exists");
-            error.statusCode = 404;
+            error.statusCode = 409;
             throw error;
         }
         const insertedUser = yield user_model_1.default.createUser({ userName, userEmail });

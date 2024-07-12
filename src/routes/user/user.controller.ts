@@ -38,7 +38,7 @@ const createUser = async (
 
     if (existingUser !== undefined || existingUser !== null) {
       const error : CustomError = new Error("User already exists");
-      error.statusCode = 404;
+      error.statusCode = 409;
       throw error; 
     }
 

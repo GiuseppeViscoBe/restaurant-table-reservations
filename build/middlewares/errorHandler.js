@@ -6,45 +6,45 @@ const errorHandler = (err, req, res, next) => {
     const environment = process.env.ENVIRONMENT;
     switch (statusCode) {
         case constants_1.errorConstants.VALIDATION_ERROR:
-            res.json({
+            res.status(statusCode).json({
                 title: "Validation Error",
                 message: err.message,
-                stackTrace: environment == 'development' ? err.stack : '',
+                stackTrace: environment == "development" ? err.stack : "",
             });
             break;
         case constants_1.errorConstants.NOT_FOUND:
-            res.json({
+            res.status(statusCode).json({
                 title: "Not Found",
                 message: err.message,
-                stackTrace: environment == 'development' ? err.stack : '',
+                stackTrace: environment == "development" ? err.stack : "",
             });
             break;
         case constants_1.errorConstants.UNAUTHORIZED:
-            res.json({
+            res.status(statusCode).json({
                 title: "Unauthorized",
                 message: err.message,
-                stackTrace: environment == 'development' ? err.stack : '',
+                stackTrace: environment == "development" ? err.stack : "",
             });
             break;
         case constants_1.errorConstants.FORBIDDEN:
-            res.json({
+            res.status(statusCode).json({
                 title: "Forbidden",
                 message: err.message,
-                stackTrace: environment == 'development' ? err.stack : '',
+                stackTrace: environment == "development" ? err.stack : "",
             });
             break;
         case constants_1.errorConstants.CONFLICT:
-            res.json({
+            res.status(statusCode).json({
                 title: "Conflict",
                 message: err.message,
-                stackTrace: environment == 'development' ? err.stack : '',
+                stackTrace: environment == "development" ? err.stack : "",
             });
             break;
         default:
-            res.json({
+            res.status(statusCode).json({
                 title: "Generic Error",
                 message: err.message,
-                stackTrace: environment == 'development' ? err.stack : '',
+                stackTrace: environment == "development" ? err.stack : "",
             });
             break;
     }
