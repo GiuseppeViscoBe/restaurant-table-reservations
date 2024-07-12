@@ -6,6 +6,8 @@ import {
 } from "../../validators/reservation.validator";
 import userUtils from "../../utils/user.utils";
 import reservationUtils from "../../utils/reservation.utils";
+import { CustomError } from "../../interfaces/error.interface";
+import { z } from "zod";
 
 //@desc Create new reservation
 //@route POST/reservations
@@ -25,11 +27,22 @@ const createReservation = async (
 
     const reservationsResult = await reservationUtils.getReservationsByDateRange(reservationTimeStartToDate,reservationTimeEndToDate,1,10)
 
-    if (reservationsResult) {
-      reservationUtils.checkIfTableIsAlreadyBooked(
-        reservationsResult?.pagedReservations,
-        tableNumber
-      );
+
+    if(reservationsResult?.pagedReservations.length === 0){
+      const error: CustomError = new Error("There are no reservations for the date inserted");
+         error.statusCode = 404;
+         throw error;
+    }
+
+    const isTableBooked = reservationUtils.checkIfTableIsAlreadyBooked(
+      reservationsResult?.pagedReservations,
+      tableNumber
+    );
+
+    if (isTableBooked) {
+      const error: CustomError = new Error("Table is already booked for this time slot");
+      error.statusCode = 404;
+      throw error;
     }
 
     const reservationTimeParsedToDate = new Date(reservationTime);
@@ -56,6 +69,7 @@ const createReservation = async (
     }
   }
 };
+
 
 //@desc Get reservations by start date and end date
 //@route GET/reservations
@@ -90,7 +104,39 @@ const getReservations = async (
   }
 };
 
+//@desc Delete Reservation by userEmail, tableNumber and reservationTime
+//@route DELETE/reservations
+//@access public
+const deleteReservation = async (req: Request, res : Response, next : NextFunction) : Promise<void> => {
+  
+  try {
+    const {userEmail , tableNumber, reservationTime}  = req.body
+
+    const [reservationTimeStartToDate, reservationTimeEndToDate] = reservationUtils.parseAndSetReservationTime(reservationTime);
+    
+     const reservationsResult = await reservationUtils.getReservationsByDateRangeTableNumber(reservationTimeStartToDate,reservationTimeEndToDate,tableNumber,1,10)
+ 
+     if (!reservationsResult?.pagedReservations.length) {
+         const error: CustomError = new Error("There are no reservations for this time");
+         error.statusCode = 404;
+         throw error;
+       }
+ 
+      const deletionResult = await reservationModel.deleteReservation(reservationTimeStartToDate, userEmail, tableNumber)
+     
+       if(deletionResult.numDeletedRows < 1){
+         const error: CustomError = new Error("There was an error deleting your reservation");
+         error.statusCode = 404;
+         throw error;
+       }
+       res.status(200).json(deletionResult.numDeletedRows)
+  } catch (error) {
+    next(error)
+  }
+}
+
 export default {
   createReservation,
   getReservations,
+  deleteReservation
 };

@@ -1,3 +1,4 @@
+import { DeleteResult } from "kysely";
 import { db } from "../config/database";
 import { Reservation, PaginatedReservations } from "../interfaces/reservation.interface";
 
@@ -55,8 +56,53 @@ const findReservationsByDateRange = async (
   };
 };
 
+const findReservationsByDateRangeTableNumber = async (
+  startDate: Date,
+  endDate: Date,
+  tableNumber : number,
+  currentPage: number,
+  itemsPerPage: number
+) : Promise<PaginatedReservations | undefined> => {
+  const offset = (currentPage - 1) * itemsPerPage;
+
+  const pagedReservations = await db
+    .selectFrom("reservations")
+    .selectAll()
+    .limit(itemsPerPage)
+    .offset(offset)
+    .where("reservationTime", ">=", startDate)
+    .where("reservationTime", "<=", endDate)
+    .where('tableNumber', '=', tableNumber)
+    .execute();
+
+  const reservationsCount = await db
+    .selectFrom("reservations")
+    .select(db.fn.count("id").as("count"))
+    .executeTakeFirst();
+
+  const totalPages = Math.ceil(Number(reservationsCount?.count) / itemsPerPage);
+
+  return {
+    pagedReservations,
+    totalPages,
+    currentPage,
+  };
+};
+
+
+const deleteReservation = async (reservationTime: Date, userEmail : string, tableNumber : number) : Promise<DeleteResult> => {
+       return await db
+       .deleteFrom('reservations')
+       .where('reservations.userEmail', '=', userEmail)
+       .where('reservations.tableNumber','=',tableNumber)
+       .where('reservations.reservationTime','=',reservationTime)
+       .executeTakeFirst()
+}
+
 export default {
   createReservation,
   findReservationsByDateRange,
+  deleteReservation,
+  findReservationsByDateRangeTableNumber
 };
 

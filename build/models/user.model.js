@@ -10,6 +10,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const database_1 = require("../config/database");
+const getUsers = () => __awaiter(void 0, void 0, void 0, function* () {
+    const userList = yield database_1.db.selectFrom("users")
+        .selectAll()
+        .execute();
+    return userList;
+});
 const createUser = (user) => __awaiter(void 0, void 0, void 0, function* () {
     const insertedUserResult = yield database_1.db
         .insertInto("users")
@@ -35,6 +41,7 @@ const getUserById = (id) => __awaiter(void 0, void 0, void 0, function* () {
     return userResultById;
 });
 exports.default = {
+    getUsers,
     createUser,
     getUserByEmail,
     getUserById,

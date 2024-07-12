@@ -47,7 +47,39 @@ const findReservationsByDateRange = (startDate, endDate, currentPage, itemsPerPa
         currentPage,
     };
 });
+const findReservationsByDateRangeTableNumber = (startDate, endDate, tableNumber, currentPage, itemsPerPage) => __awaiter(void 0, void 0, void 0, function* () {
+    const offset = (currentPage - 1) * itemsPerPage;
+    const pagedReservations = yield database_1.db
+        .selectFrom("reservations")
+        .selectAll()
+        .limit(itemsPerPage)
+        .offset(offset)
+        .where("reservationTime", ">=", startDate)
+        .where("reservationTime", "<=", endDate)
+        .where('tableNumber', '=', tableNumber)
+        .execute();
+    const reservationsCount = yield database_1.db
+        .selectFrom("reservations")
+        .select(database_1.db.fn.count("id").as("count"))
+        .executeTakeFirst();
+    const totalPages = Math.ceil(Number(reservationsCount === null || reservationsCount === void 0 ? void 0 : reservationsCount.count) / itemsPerPage);
+    return {
+        pagedReservations,
+        totalPages,
+        currentPage,
+    };
+});
+const deleteReservation = (reservationTime, userEmail, tableNumber) => __awaiter(void 0, void 0, void 0, function* () {
+    return yield database_1.db
+        .deleteFrom('reservations')
+        .where('reservations.userEmail', '=', userEmail)
+        .where('reservations.tableNumber', '=', tableNumber)
+        .where('reservations.reservationTime', '=', reservationTime)
+        .executeTakeFirst();
+});
 exports.default = {
     createReservation,
     findReservationsByDateRange,
+    deleteReservation,
+    findReservationsByDateRangeTableNumber
 };

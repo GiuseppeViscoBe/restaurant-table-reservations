@@ -4,7 +4,6 @@ import userRouter from '../routes/user/user.router';
 import reservationRouter from '../routes/reservation/reservation.router';
 import cors from 'cors'
 
-
 const app: Application = express()
 
 app.use(express.json())

@@ -1,4 +1,5 @@
 import { CustomError } from "../interfaces/error.interface";
+import { User } from "../interfaces/user.interface";
 import userModel from "../models/user.model";
 
 const checkIfUserExists = async (email: string): Promise<void> => {
@@ -13,15 +14,11 @@ const checkIfUserExists = async (email: string): Promise<void> => {
     }
   };
 
-  const checkIfUserDoesNotExists = async (email: string): Promise<void> => {
+  const checkIfUserDoesNotExists = async (email: string): Promise<User | undefined> => {
 
     const existingUser = await userModel.getUserByEmail(email);
     
-    if (!existingUser) {
-      const error : CustomError = new Error("User does not exists");
-      error.statusCode = 404;
-      throw error; 
-    }
+    return existingUser
   };
 
   export default {

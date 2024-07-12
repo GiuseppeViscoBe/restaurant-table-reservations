@@ -15,18 +15,48 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const user_model_1 = __importDefault(require("../../models/user.model"));
 const user_validator_1 = require("../../validators/user.validator");
 const user_utils_1 = __importDefault(require("../../utils/user.utils"));
+const zod_1 = require("zod");
+//@desc Get Users
+//@route GET/user
+//@access public
+const getUsersList = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const userList = yield user_model_1.default.getUsers();
+        res.status(200).json(userList);
+    }
+    catch (error) {
+        next(error);
+    }
+});
 //@desc Create User
 //@route POST/user
 //@access public
 const createUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { userName, userEmail } = user_validator_1.createUserSchema.parse(req.body);
-        yield user_utils_1.default.checkIfUserExists(userEmail);
+        const existingUser = yield user_utils_1.default.checkIfUserExists(userEmail);
+        if (existingUser !== undefined || existingUser !== null) {
+            const error = new Error("User already exists");
+            error.statusCode = 404;
+            throw error;
+        }
         const insertedUser = yield user_model_1.default.createUser({ userName, userEmail });
         res.status(200).json(insertedUser);
     }
     catch (error) {
-        next(error);
+        if (error instanceof zod_1.z.ZodError) {
+            // Extract error messages
+            console.log(error.errors);
+            const errorMessages = error.errors.map(err => err.message).join(', ');
+            const errorCustom = new Error(errorMessages);
+            errorCustom.statusCode = 400;
+            // Pass the error messages to the error handler
+            next(errorCustom);
+        }
+        else {
+            // Pass unexpected errors to the error handler
+            next(error);
+        }
     }
 });
-exports.default = { createUser };
+exports.default = { createUser, getUsersList };

@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">32.35% </span>
+                <span class="strong">37.14% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>11/34</span>
+                <span class='fraction'>13/35</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">45% </span>
+                <span class="strong">40.9% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>9/20</span>
+                <span class='fraction'>9/22</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">7.69% </span>
+                <span class="strong">6.66% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>1/13</span>
+                <span class='fraction'>1/15</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">40.74% </span>
+                <span class="strong">48.14% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>11/27</span>
+                <span class='fraction'>13/27</span>
             </div>
         
             
@@ -102,7 +102,8 @@
 <a name='L37'></a><a href='#L37'>37</a>
 <a name='L38'></a><a href='#L38'>38</a>
 <a name='L39'></a><a href='#L39'>39</a>
-<a name='L40'></a><a href='#L40'>40</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L40'></a><a href='#L40'>40</a>
+<a name='L41'></a><a href='#L41'>41</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -125,11 +126,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -137,6 +133,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -155,30 +157,31 @@ var __importDefault = (this &amp;&amp; this.__importDefault) || function (mod) {
     return (mod &amp;&amp; mod.__esModule) ? mod : <span class="branch-1 cbranch-no" title="branch not covered" >{ "default": mod };</span>
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getReservationsByDateRange = void 0;
+exports.getReservationsByDateRangeTableNumber = exports.getReservationsByDateRange = void 0;
 const reservation_model_1 = __importDefault(require("../models/reservation.model"));
 const parseAndSetReservationTime = <span class="fstat-no" title="function not covered" >(r</span>eservationTime) =&gt; {
     const reservationTimeStartToDate = <span class="cstat-no" title="statement not covered" >new Date(reservationTime);</span>
-    const reservationTimeEndToDate = <span class="cstat-no" title="statement not covered" >new Date(new Date(reservationTime).setHours(new Date(reservationTime).getHours() + 1));</span>
+    const reservationTimeEndToDate = <span class="cstat-no" title="statement not covered" >new Date(new Date(reservationTime).setUTCMinutes(new Date(reservationTime).getUTCMinutes() + 59));</span>
 <span class="cstat-no" title="statement not covered" >    return [reservationTimeStartToDate, reservationTimeEndToDate];</span>
 };
 const checkIfTableIsAlreadyBooked = <span class="fstat-no" title="function not covered" >(r</span>eservations, tableNumber) =&gt; {
-    const isTableBooked = <span class="cstat-no" title="statement not covered" >reservations.some(<span class="fstat-no" title="function not covered" >(r</span>eservation) =&gt; <span class="cstat-no" title="statement not covered" >reservation.tableNumber === tableNumber)</span>;</span>
-<span class="cstat-no" title="statement not covered" >    if (isTableBooked) {</span>
-        const error = <span class="cstat-no" title="statement not covered" >new Error("Table is already booked for this time slot");</span>
-<span class="cstat-no" title="statement not covered" >        error.statusCode = 404;</span>
-<span class="cstat-no" title="statement not covered" >        throw error;</span>
-    }
+<span class="cstat-no" title="statement not covered" >    return reservations === null || reservations === void 0 ? void 0 : reservations.some(<span class="fstat-no" title="function not covered" >(r</span>eservation) =&gt; <span class="cstat-no" title="statement not covered" >reservation.tableNumber === tableNumber)</span>;</span>
 };
 const getReservationsByDateRange = <span class="fstat-no" title="function not covered" >(r</span>eservationDateStart, reservationDateEnd, currentPage, itemsPerPage) =&gt; <span class="cstat-no" title="statement not covered" >__awaiter(void 0, void 0, void 0, <span class="fstat-no" title="function not covered" >fu</span>nction* () {</span>
     const reservationsResult = <span class="cstat-no" title="statement not covered" >yield reservation_model_1.default.findReservationsByDateRange(reservationDateStart, reservationDateEnd, currentPage, itemsPerPage);</span>
 <span class="cstat-no" title="statement not covered" >    return reservationsResult;</span>
 });
 exports.getReservationsByDateRange = getReservationsByDateRange;
+const getReservationsByDateRangeTableNumber = <span class="fstat-no" title="function not covered" >(r</span>eservationDateStart, reservationDateEnd, tableNumber, currentPage, itemsPerPage) =&gt; <span class="cstat-no" title="statement not covered" >__awaiter(void 0, void 0, void 0, <span class="fstat-no" title="function not covered" >fu</span>nction* () {</span>
+    const reservationsResult = <span class="cstat-no" title="statement not covered" >yield reservation_model_1.default.findReservationsByDateRangeTableNumber(reservationDateStart, reservationDateEnd, tableNumber, currentPage, itemsPerPage);</span>
+<span class="cstat-no" title="statement not covered" >    return reservationsResult;</span>
+});
+exports.getReservationsByDateRangeTableNumber = getReservationsByDateRangeTableNumber;
 exports.default = {
     parseAndSetReservationTime,
     checkIfTableIsAlreadyBooked,
-    getReservationsByDateRange: exports.getReservationsByDateRange
+    getReservationsByDateRange: exports.getReservationsByDateRange,
+    getReservationsByDateRangeTableNumber: exports.getReservationsByDateRangeTableNumber
 };
 &nbsp;</pre></td></tr></table></pre>
 
@@ -187,7 +190,7 @@ exports.default = {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-06-30T18:12:13.689Z
+                at 2024-07-05T10:06:42.748Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

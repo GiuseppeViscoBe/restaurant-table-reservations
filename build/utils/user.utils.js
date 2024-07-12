@@ -23,11 +23,7 @@ const checkIfUserExists = (email) => __awaiter(void 0, void 0, void 0, function*
 });
 const checkIfUserDoesNotExists = (email) => __awaiter(void 0, void 0, void 0, function* () {
     const existingUser = yield user_model_1.default.getUserByEmail(email);
-    if (!existingUser) {
-        const error = new Error("User does not exists");
-        error.statusCode = 404;
-        throw error;
-    }
+    return existingUser;
 });
 exports.default = {
     checkIfUserExists,

@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "test": "jest --coverage",
-    "test:watch": "jest --watch",
+    "test-watch": "jest --watch",
     "build": "concurrently \"rimraf build\"\"npx tsc\"",
     "prestart": "npm run build",
     "start": "node build/server.js",
@@ -31,9 +31,12 @@
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",
+    "@types/jest": "^29.5.12",
     "@types/mysql": "^2.15.26",
+    "@types/supertest": "^6.0.2",
     "nodemon": "^3.1.4",
     "rimraf": "^5.0.7",
+    "supertest": "^7.0.0",
     "ts-jest": "^29.1.5"
   }
 }

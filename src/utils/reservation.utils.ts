@@ -12,16 +12,11 @@ const parseAndSetReservationTime = (reservationTime: string): [Date, Date] => {
   };
   
   const checkIfTableIsAlreadyBooked = (
-    reservations: Reservation[],
+    reservations: Reservation[] | undefined,
     tableNumber: number
-  ): void => {
-    const isTableBooked = reservations.some((reservation) => reservation.tableNumber === tableNumber);
-  
-    if (isTableBooked) {
-      const error: CustomError = new Error("Table is already booked for this time slot");
-      error.statusCode = 404;
-      throw error;
-    }
+  ): boolean | undefined => {
+
+    return reservations?.some((reservation) => reservation.tableNumber === tableNumber);
   };
 
   export const getReservationsByDateRange = async (
@@ -41,8 +36,28 @@ const parseAndSetReservationTime = (reservationTime: string): [Date, Date] => {
     return reservationsResult;
   };
 
+  export const getReservationsByDateRangeTableNumber = async (
+    reservationDateStart: Date,
+    reservationDateEnd: Date,
+    tableNumber : number,
+    currentPage: number,
+    itemsPerPage: number
+  ): Promise<PaginatedReservations | undefined> => {
+  
+    const reservationsResult = await reservationModel.findReservationsByDateRangeTableNumber(
+      reservationDateStart,
+      reservationDateEnd,
+      tableNumber,
+      currentPage,
+      itemsPerPage
+    );
+  
+    return reservationsResult;
+  };
+
   export default {
     parseAndSetReservationTime,
     checkIfTableIsAlreadyBooked,
-    getReservationsByDateRange
+    getReservationsByDateRange,
+    getReservationsByDateRangeTableNumber
   }

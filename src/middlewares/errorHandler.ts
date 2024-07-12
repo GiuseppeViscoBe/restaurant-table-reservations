@@ -12,7 +12,6 @@ const errorHandler = (
   const statusCode: number = err.statusCode ? err.statusCode : 500
   const environment = process.env.ENVIRONMENT
 
-
   switch (statusCode) {
     case errorConstants.VALIDATION_ERROR:
       res.json({

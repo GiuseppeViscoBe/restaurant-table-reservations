@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getReservationsByDateRange = void 0;
+exports.getReservationsByDateRangeTableNumber = exports.getReservationsByDateRange = void 0;
 const reservation_model_1 = __importDefault(require("../models/reservation.model"));
 const parseAndSetReservationTime = (reservationTime) => {
     const reservationTimeStartToDate = new Date(reservationTime);
@@ -20,20 +20,21 @@ const parseAndSetReservationTime = (reservationTime) => {
     return [reservationTimeStartToDate, reservationTimeEndToDate];
 };
 const checkIfTableIsAlreadyBooked = (reservations, tableNumber) => {
-    const isTableBooked = reservations.some((reservation) => reservation.tableNumber === tableNumber);
-    if (isTableBooked) {
-        const error = new Error("Table is already booked for this time slot");
-        error.statusCode = 404;
-        throw error;
-    }
+    return reservations === null || reservations === void 0 ? void 0 : reservations.some((reservation) => reservation.tableNumber === tableNumber);
 };
 const getReservationsByDateRange = (reservationDateStart, reservationDateEnd, currentPage, itemsPerPage) => __awaiter(void 0, void 0, void 0, function* () {
     const reservationsResult = yield reservation_model_1.default.findReservationsByDateRange(reservationDateStart, reservationDateEnd, currentPage, itemsPerPage);
     return reservationsResult;
 });
 exports.getReservationsByDateRange = getReservationsByDateRange;
+const getReservationsByDateRangeTableNumber = (reservationDateStart, reservationDateEnd, tableNumber, currentPage, itemsPerPage) => __awaiter(void 0, void 0, void 0, function* () {
+    const reservationsResult = yield reservation_model_1.default.findReservationsByDateRangeTableNumber(reservationDateStart, reservationDateEnd, tableNumber, currentPage, itemsPerPage);
+    return reservationsResult;
+});
+exports.getReservationsByDateRangeTableNumber = getReservationsByDateRangeTableNumber;
 exports.default = {
     parseAndSetReservationTime,
     checkIfTableIsAlreadyBooked,
-    getReservationsByDateRange: exports.getReservationsByDateRange
+    getReservationsByDateRange: exports.getReservationsByDateRange,
+    getReservationsByDateRangeTableNumber: exports.getReservationsByDateRangeTableNumber
 };

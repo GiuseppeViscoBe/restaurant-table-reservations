@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">43.33% </span>
+                <span class="strong">32.5% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>13/30</span>
+                <span class='fraction'>13/40</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">50% </span>
+                <span class="strong">40.9% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>9/18</span>
+                <span class='fraction'>9/22</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">10% </span>
+                <span class="strong">9.09% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>1/10</span>
+                <span class='fraction'>1/11</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">54.16% </span>
+                <span class="strong">39.39% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>13/24</span>
+                <span class='fraction'>13/33</span>
             </div>
         
             
@@ -108,7 +108,16 @@
 <a name='L43'></a><a href='#L43'>43</a>
 <a name='L44'></a><a href='#L44'>44</a>
 <a name='L45'></a><a href='#L45'>45</a>
-<a name='L46'></a><a href='#L46'>46</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L46'></a><a href='#L46'>46</a>
+<a name='L47'></a><a href='#L47'>47</a>
+<a name='L48'></a><a href='#L48'>48</a>
+<a name='L49'></a><a href='#L49'>49</a>
+<a name='L50'></a><a href='#L50'>50</a>
+<a name='L51'></a><a href='#L51'>51</a>
+<a name='L52'></a><a href='#L52'>52</a>
+<a name='L53'></a><a href='#L53'>53</a>
+<a name='L54'></a><a href='#L54'>54</a>
+<a name='L55'></a><a href='#L55'>55</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -143,8 +152,17 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -186,15 +204,24 @@ exports.db = new kysely_1.Kysely({
     dialect: new kysely_1.MysqlDialect({ pool })
 });
 const verifyDatabaseConnection = <span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >__awaiter(void 0, void 0, void 0, <span class="fstat-no" title="function not covered" >fu</span>nction* () {</span>
-<span class="cstat-no" title="statement not covered" >    try {</span>
-<span class="cstat-no" title="statement not covered" >        yield pool</span>
-            .promise()
-            .query('SELECT 1');
-<span class="cstat-no" title="statement not covered" >        console.log('Database connection established');</span>
+    let isConnected = <span class="cstat-no" title="statement not covered" >false;</span>
+    let attempts = <span class="cstat-no" title="statement not covered" >0;</span>
+    const maxAttempts = <span class="cstat-no" title="statement not covered" >Number(process.env.MAX_ATTEMPTS);</span>
+    const retryInterval = <span class="cstat-no" title="statement not covered" >Number(process.env.RETRY_INTERVAL);</span> // Milliseconds
+<span class="cstat-no" title="statement not covered" >    while (!isConnected &amp;&amp; attempts &lt; maxAttempts) {</span>
+<span class="cstat-no" title="statement not covered" >        try {</span>
+<span class="cstat-no" title="statement not covered" >            yield pool.promise().query('SELECT 1');</span>
+<span class="cstat-no" title="statement not covered" >            console.log('Database connection established');</span>
+<span class="cstat-no" title="statement not covered" >            isConnected = true;</span>
+        }
+        catch (error) {
+<span class="cstat-no" title="statement not covered" >            attempts++;</span>
+<span class="cstat-no" title="statement not covered" >            console.error(`Attempt ${attempts} failed. Retrying in ${retryInterval / 1000} seconds...`);</span>
+<span class="cstat-no" title="statement not covered" >            yield new Promise(<span class="fstat-no" title="function not covered" >re</span>solve =&gt; <span class="cstat-no" title="statement not covered" >setTimeout(resolve, retryInterval))</span>;</span>
+        }
     }
-    catch (error) {
-<span class="cstat-no" title="statement not covered" >        console.error('Database connection error:', error);</span>
-<span class="cstat-no" title="statement not covered" >        throw new Error('Failed to connect to the database');</span>
+<span class="cstat-no" title="statement not covered" >    if (!isConnected) {</span>
+<span class="cstat-no" title="statement not covered" >        console.error('Failed to establish database connection after multiple attempts.');</span>
     }
 });
 exports.verifyDatabaseConnection = verifyDatabaseConnection;
@@ -205,7 +232,7 @@ exports.verifyDatabaseConnection = verifyDatabaseConnection;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-06-30T18:12:13.689Z
+                at 2024-07-05T10:06:42.748Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

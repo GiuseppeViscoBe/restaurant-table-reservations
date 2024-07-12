@@ -8,4 +8,5 @@ const reservation_controller_1 = __importDefault(require("./reservation.controll
 const reservationRouter = express_1.default.Router();
 reservationRouter.get('/reservations', reservation_controller_1.default.getReservations);
 reservationRouter.post('/reservations', reservation_controller_1.default.createReservation);
+reservationRouter.delete('/reservations', reservation_controller_1.default.deleteReservation);
 exports.default = reservationRouter;
