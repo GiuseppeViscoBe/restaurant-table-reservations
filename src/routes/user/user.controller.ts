@@ -19,8 +19,19 @@ const createUser = async (
     const insertedUser = await userModel.createUser({ userName, userEmail });
 
     res.status(200).json(insertedUser);
-  } catch (error) {
-    next(error);
+  }  catch (error) {
+    if (error instanceof z.ZodError) {
+      // Extract error messages
+      console.log(error.errors)
+      const errorMessages = error.errors.map(err => err.message).join(', ');
+      const errorCustom : CustomError = new Error(errorMessages);
+      errorCustom.statusCode = 400;
+      // Pass the error messages to the error handler
+      next(errorCustom);
+    } else {
+      // Pass unexpected errors to the error handler
+      next(error);
+    }
   }
 };
 
