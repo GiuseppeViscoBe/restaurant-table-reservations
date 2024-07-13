@@ -1,6 +1,8 @@
 import { Request, Response, NextFunction } from "express";
 import { errorConstants } from "../constants";
 import { CustomError } from "../interfaces/error.interface";
+import { z } from "zod";
+import getErrorMessages from "../utils/validationError.utils";
 
 const errorHandler = (
   err: CustomError,
@@ -8,6 +10,14 @@ const errorHandler = (
   res: Response,
   next: NextFunction
 ): void => {
+
+  if (err instanceof z.ZodError) {
+    const errorMessages = getErrorMessages(err);
+    const errorCustom: CustomError = new Error(errorMessages);
+    errorCustom.statusCode = 400;
+    err = errorCustom; 
+  }
+
   const statusCode: number = err.statusCode ? err.statusCode : 500;
   const environment = process.env.ENVIRONMENT;
 

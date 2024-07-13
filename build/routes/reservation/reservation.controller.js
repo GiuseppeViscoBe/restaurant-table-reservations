@@ -16,7 +16,6 @@ const reservation_model_1 = __importDefault(require("../../models/reservation.mo
 const reservation_validator_1 = require("../../validators/reservation.validator");
 const user_utils_1 = __importDefault(require("../../utils/user.utils"));
 const reservation_utils_1 = __importDefault(require("../../utils/reservation.utils"));
-const zod_1 = require("zod");
 //@desc Create new reservation
 //@route POST/reservations
 //@access public
@@ -46,19 +45,7 @@ const createReservation = (req, res, next) => __awaiter(void 0, void 0, void 0, 
         res.status(201).json(insertedReservation);
     }
     catch (error) {
-        if (error instanceof zod_1.z.ZodError) {
-            // Extract error messages
-            console.log(error.errors);
-            const errorMessages = error.errors.map(err => err.message).join(', ');
-            const errorCustom = new Error(errorMessages);
-            errorCustom.statusCode = 400;
-            // Pass the error messages to the error handler
-            next(errorCustom);
-        }
-        else {
-            // Pass unexpected errors to the error handler
-            next(error);
-        }
+        next(error);
     }
 });
 //@desc Get reservations by start date and end date
@@ -73,19 +60,7 @@ const getReservations = (req, res, next) => __awaiter(void 0, void 0, void 0, fu
         res.status(200).json(reservationsResult);
     }
     catch (error) {
-        if (error instanceof zod_1.z.ZodError) {
-            // Extract error messages
-            console.log(error.errors);
-            const errorMessages = error.errors.map(err => err.message).join(', ');
-            const errorCustom = new Error(errorMessages);
-            errorCustom.statusCode = 400;
-            // Pass the error messages to the error handler
-            next(errorCustom);
-        }
-        else {
-            // Pass unexpected errors to the error handler
-            next(error);
-        }
+        next(error);
     }
 });
 //@desc Delete Reservation by userEmail, tableNumber and reservationTime

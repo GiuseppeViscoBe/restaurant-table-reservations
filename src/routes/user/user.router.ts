@@ -3,7 +3,7 @@ import userController from './user.controller'
 
 const userRouter = express.Router()
 
-userRouter.get('/user', userController.getUsersList)
-userRouter.post('/user', userController.createUser)
+userRouter.get('/users', userController.getUsersList)
+userRouter.post('/users', userController.createUser)
 
 export default userRouter

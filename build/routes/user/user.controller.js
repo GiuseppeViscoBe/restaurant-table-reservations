@@ -15,7 +15,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const user_model_1 = __importDefault(require("../../models/user.model"));
 const user_validator_1 = require("../../validators/user.validator");
 const user_utils_1 = __importDefault(require("../../utils/user.utils"));
-const zod_1 = require("zod");
 //@desc Get Users
 //@route GET/user
 //@access public
@@ -44,19 +43,7 @@ const createUser = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
         res.status(200).json(insertedUser);
     }
     catch (error) {
-        if (error instanceof zod_1.z.ZodError) {
-            // Extract error messages
-            console.log(error.errors);
-            const errorMessages = error.errors.map(err => err.message).join(', ');
-            const errorCustom = new Error(errorMessages);
-            errorCustom.statusCode = 400;
-            // Pass the error messages to the error handler
-            next(errorCustom);
-        }
-        else {
-            // Pass unexpected errors to the error handler
-            next(error);
-        }
+        next(error);
     }
 });
 exports.default = { createUser, getUsersList };
